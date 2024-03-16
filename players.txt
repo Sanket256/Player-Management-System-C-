@@ -1,0 +1,4 @@
+ Joursey:- 11  Name:- Sanket  Run:- 12  Wicket:- 122  Matches:- 2  Position:- 1
+ Joursey:- 10  Name:- Sanket  Run:- 21  Wicket:- 12  Matches:- 22  Position:- 1
+ Joursey:- 45  Name:- Rohit  Run:- 22  Wicket:- 33  Matches:- 111  Position:- 2
+ Joursey:- 18  Name:- Virat  Run:- 22  Wicket:- 31  Matches:- 100  Position:- 3
