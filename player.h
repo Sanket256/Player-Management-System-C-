@@ -1,29 +1,26 @@
+#include<iostream>
+using namespace std;
 
 class Player
 {
-	int jerSeyNo;
-	char name[30];
+	int j_no;
+	char name[20];
 	int runs;
-	int wickets;
 	int matches;
+	int wickets;
 	
 	public:
-		
-	Player();
-	Player(int,char*,int,int,int);
-
-	int getJno();
-	char* getName();
-	int getRun();
-	int getWicket();
-	int getMatches();
-
-	void setJno(int);
-	void setName(char*);
-	void setRun(int);
-	void setWicket(int);
-	void setMatches(int);
-
-	void displayPlayer();
+		Player();
+		Player(int ,char* , int ,int ,int);
+		void setJ_no(int);
+		void setName(char* );
+		void setRuns(int);
+		void setMatches(int);
+		void setWicket(int);
+		int getJ_no();
+		char* getName();
+		int getRuns();
+		int getMatches();
+		int getWickets();
+		void display();
 };
-//void operator<<(ostream&,Player&);
