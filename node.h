@@ -1,14 +1,17 @@
-#include"player.cpp"
-class Node{
-
-    Player player;
-    Node* next;
-
-    public:
-
-    Node(Player&);
-    void setData(Player&);
-    void setNext(Node*);
-    Player& getData();
-    Node* getNext();
+#include<iostream>
+using namespace std;
+#include"player.h"
+template<class T>
+ 
+class Node
+{
+	T data;
+ 	Node* next;
+ 	
+ 	public:
+ 		Node(T&);
+ 		T& getData();
+ 		Node* getNext();
+		void setData(T&);
+		void setNext(Node* ); 
 };
