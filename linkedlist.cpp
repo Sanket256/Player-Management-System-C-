@@ -1,200 +1,213 @@
-#include"linkedlist.h"
-#include<fstream>
-#include<stdlib.h>
-LinkedList::LinkedList(){
-    this->start=NULL;
-	ifstream in("demo.bin",ios_base::binary);
-	while(start!=NULL)
-	{
-		Node* p=start;
-		in.read((char*)(&p->getData()),sizeof(p->getData()));
-		if(in.eof())
-		{
-			break;
-		}
-		p->getData().displayPlayer();
-		p=p->getNext();	
-	}
-	in.close();
+#include"linklist.h"
+#include"fstream"
 
+LinkedList::LinkedList()
+{
+	start=NULL;
 }
-void LinkedList::addPlayerToPosition(Player& player,int pos){
-    Node* temp=new Node(player);
-	if(start==NULL)
+//////////////////////////////////////////
+void LinkedList::insertBeg(Player d)
+{
+	Node<Player> *temp = new  Node<Player>(d);
+	temp->setNext(start);
+	start = temp;
+	
+}
+/////////////////////////////////
+void LinkedList::insertPos(Player d,int pos)
+{
+	Node<Player> *temp=new Node<Player>(d);
+	if(start == NULL)
 	{
-		start=temp;
+		start = temp;
 		return;
 	}
-	if(pos==1)
+	if(pos == 1)
 	{
 		temp->setNext(start);
-		start=temp;
+		start = temp;
 		return;
 	}
 	int i=1;
-	Node* p=start;
-	while(i < pos-1 && p->getNext()!=NULL)
+	Node<Player> *p=start;
+	while(i<pos-1 && p->getNext() != NULL)
 	{
 		p=p->getNext();
-		i++;
+		i++;	
 	}
 	temp->setNext(p->getNext());
 	p->setNext(temp);
+	display();
 }
-void LinkedList::DeletePalyerFromPosition(int pos){
-    if(start==NULL)
+/////////////////////////////////
+void LinkedList::deletePos(int pos)
+{
+		Node<Player> *p=start;
+	if(start == NULL)
 	{
-		cout<<"\n No Player to delete  ";
+		cout<<"\nNo element to delete";
 		return;
 	}
-	
-	Node*p=start;
-	if(pos==1)
+		
+	else if(pos == 1)
 	{
-		start=start->getNext();
-		//p->getData().displayPlayer();
-		cout<<"\n Player is deleted sucessfully !!!";
+	
+		start = p->getNext();
+		p->getData().display();
+		cout<<"\nPlayer is deleted successfully";
 		delete p;
-		return;
+		
+	}
+	else
+	{
+		int i=1;
+		while(i<pos-1 && p->getNext() != NULL)
+		{
+			p=p->getNext();
+			i++;
+		}
+		if(i == pos-1 && p->getNext() != NULL)
+		{
+			Node<Player> *q=p->getNext();
+			p->setNext(q->getNext());
+			q->getData().display();
+			cout<<"\nPlayer is deleted successfully";
+			delete q;	
+		}
+		else
+		{
+			cout<<"\nInvalid Position";
+		}
+		
+	}
+}
+/////////////////////////////////////////////
+Node<Player> * LinkedList::searchPlayer(int j_no)
+{
+	Node<Player> *p = start;
+	
+	while(p != NULL)
+	{
+		if(j_no == p->getData().getJ_no())
+		{
+			return p;
+		}
+		p = p->getNext();
+	}
+	return NULL;
+	
+}
+///////////////////////////////////////////
+bool LinkedList::updateRuns(int j_no, int runs)
+{
+	Node<Player> *p = searchPlayer(j_no);
+	if(p == NULL)
+	{
+		cout<<"\nNo player present";
+		return false;
+	}
+	if(p != NULL)
+	{
+		Player f = p->getData();
+		f.setRuns(runs);
+		p->setData(f);
+		return true;
+	}
+	else{
+		cout<<"\nPlayer not found";
+		return false;
 	}
 	
-	int i=1;
-	while(i < pos-1 && p->getNext()!=NULL)
+}
+/////////////////////////////////////////
+bool LinkedList::updateWickets(int j_no, int wicket)
+{
+	Node<Player> *p = searchPlayer(j_no);
+	if(p == NULL)
 	{
-		p=p->getNext();
-		i++;
+		cout<<"\nNo player present";
+		return false;
+	}
+	if(p != NULL)
+	{
+		Player f = p->getData();
+		f.setWicket(wicket);
+		p->setData(f);
+		return true;
+	}
+	else{
+		cout<<"\nPlayer not found";
+		return false;
 	}
 	
-	if(i==pos-1 && p->getNext()!=NULL)
+}
+///////////////////////////////////////////
+bool LinkedList::updateMatches(int j_no, int match)
+{
+	Node<Player> *p = searchPlayer(j_no);
+	if(p == NULL)
 	{
-		Node* q=p->getNext();
-		p->setNext(q->getNext());
-		//q->getData().displayPlayer();
-		cout<<"\n Player is deleted sucessfully !!!";
-		delete q;
+		cout<<"\nNo player present";
+		return false;
+	}
+	if(p != NULL)
+	{
+		Player f = p->getData();
+		f.setMatches(match);
+		p->setData(f);
+		return true;
+	}
+	else{
+		cout<<"\nPlayer not found";
+		return false;
+	}
+	
+}
+/////////////////////////////////////////
+void  LinkedList::display()
+{
+	if(start == NULL)
+	{
+		cout<<"\nNo nodes to display";
 		return;
+	}
+	else
+	{
+	cout << "+--------------+--------------+--------------+----------------+--------------+\n"; 
+    cout << "| Jersey No    |   Name       | Runs         | Matches Player |    Wickets   |\n" ;
+    cout << "+--------------+--------------+--------------+----------------+--------------+\n";
+    
+		Node<Player> *p = start;
+		while(p!=NULL)
+		{
+			p->getData().display();
+			p=p->getNext();  
+			cout << "+--------------+--------------+--------------+----------------+--------------+\n";
+		}
+//	cout << "+--------------+--------------+--------------+----------------+--------------+\n";
+    
 	}	
-}	
-void LinkedList::displayInfo(){
-    if(start==NULL)
-	{
-		cout<<"\n No Player to display in Liked List ";
-		return ;
-	}
-	else
-	{
-		Node *p=start;
-		cout<<"\n\n Player information \n";
-		//cout<<"\n |JercyNO       |  	Name     |   Runs      |  	Wicket    |  	Matches    |";
-		while(p != NULL)
-		{
-			p->getData().displayPlayer();
-			p=p->getNext();
-		}
-	}
 }
-bool LinkedList::searchPlayer(int jerSeyNo){
-    if(start==NULL)
-	{
-		cout<<"\n No Player to search in Liked List ";
-	}
-	else
-	{
-		Node* p=start;
-		while(p!=NULL)
-		{
-			if(p->getData().getJno()==jerSeyNo)
-			{
-                // p->getData()<<endl;
-				return true;
-			}
-			else
-			p=p->getNext();
-		}
-		return false;
-	}
+/////////////////////////////////////////////////
+void LinkedList::writeDataToFile(const char *fileName)
+{
+    ofstream outFile;
+	outFile.open(fileName, ios::binary);
+    if (!outFile)
+    {
+        cout << "*Error*\nFile not Opened";
+        return;
+    }
+    Node<Player> *p = start;
+    while (p != NULL)
+    {
+        // playerData = p->getData();
+		outFile.write((char*)(&p->getData()),sizeof(Player));
+        p = p->getNext();
+    }
+    outFile.close();
 }
-bool LinkedList::updatePlayer(int jerSeyNo){
-    if(start==NULL)
-	{
-		cout<<"\n No player to update in Liked List ";
-	}
-	else
-	{
-		Node* p = start;
-		while(p != NULL)
-		{
-			if(p->getData().getJno() == jerSeyNo)
-			{
-				int run,wicket,matches;
-				cout<<"\n Enter the run ";
-				cin>>run;
-				cout<<"\n Enter the wicket ";
-				cin>>wicket;
-				cout<<"\n Enter the matches ";
-				cin>>matches;
-				
-				Player &obj=p->getData();
-				obj.setRun(run);
-				obj.setWicket(wicket);
-				obj.setMatches(matches);
-				return true;
-			}
-			else
-			p=p->getNext();
-		}
-		return false;
-	}
-}
-void LinkedList::topThreePlayers(){
-    if(start==NULL)
-	{
-		cout<<"\n No player in Liked List ";
-	}
-	else
-	{
-		int fmax,smax,tmax;
-		fmax=smax=tmax=-999;
-		
-		Node *p1,*p2,*p3;
-		p1=p2=p3=NULL;
-		Node* p=start;
-		cout<<"\n\n Player information \n";
-		cout<<"\n___________________________________________________________________________";
-		cout<<"\n|  JercyNO      |    Name     |   Runs    |  	Wicket    |  	Matches    |";
-		cout<<"\n___________________________________________________________________________";
-		while(p!=NULL)
-		{
-			if(fmax < p->getData().getRun())
-			{
-				tmax=smax;
-				smax=fmax;
-				fmax=p->getData().getRun();
-				p3=p2;
-				p2=p1;
-				p1=p;
-			}
-			else if(smax < p->getData().getRun())
-			{
-				tmax=smax;
-				smax=p->getData().getRun();
-				p3=p2;
-				p2=p;	
-			}
-			else if(tmax < p->getData().getRun())
-			{
-				tmax=p->getData().getRun();
-				p3=p;
-			}
-			
-			p=p->getNext();
-		}
-		
-		p1->getData().displayPlayer();
-		p2->getData().displayPlayer();
-		p3->getData().displayPlayer();
-	}
-}
+//////////////////////////////////////////////////////////////////////
 void LinkedList::readDataFromFile(const char * fileName)
 {
     ifstream inFile(fileName, ios::binary);
@@ -203,57 +216,52 @@ void LinkedList::readDataFromFile(const char * fileName)
         cout << "*Error*\nFile not opened";
         return;
     }
-    Node* b;
-    while(inFile.read((char* )(&b), sizeof(Node*)))
+    Player b;
+    while(inFile.read((char *)(&b), sizeof(Player)))
     {
         this->insertBeg(b);
     }
     inFile.close();
 }
 
-void LinkedList::writeDataToFile(const char *fileName)
-{
-    ofstream outFile;
-	outFile.open(fileName, ios::binary );
-    if (!outFile)
-    {
-        cout << "*Error*\nFile not Opened";
-        return;
+//////////////////////////////////////////////////////////////////
+
+void LinkedList::top3PlayersByRuns() {
+    Node<Player> *first = nullptr;
+    Node<Player> *second = nullptr;
+    Node<Player> *third = nullptr;
+
+    Node<Player> *current = start;
+    while (current != nullptr) {
+        Player currentPlayer = current->getData();
+
+        if (first == nullptr || currentPlayer.getRuns() > first->getData().getRuns()) {
+            third = second;
+            second = first;
+            first = current;
+        } else if (second == nullptr || currentPlayer.getRuns() > second->getData().getRuns()) {
+            third = second;
+            second = current;
+        } else if (third == nullptr || currentPlayer.getRuns() > third->getData().getRuns()) {
+            third = current;
+        }
+
+        current = current->getNext();
     }
-    Node* p = start;
-    while (p != NULL)
-    {
-        Player playerData = p->getData();
-		outFile.write((char*)(&p->getData()),sizeof(Node*));
-        p = p->getNext();
+    cout << "Top 3 Players by Runs:\n";
+    if (first != nullptr) {
+        cout << "1. ";
+        first->getData().display();
+        cout << endl;
     }
-    outFile.close();
-}
-LinkedList::~LinkedList(){
-    ofstream out("demo.bin",ios_base::binary);
-	while(start != NULL)
-	{
-		Node *p=start;
-		out.write((char*)(&p->getData()),sizeof(p->getData()));
-		start=start->getNext();
-		delete p;	
-	}
-	out.close();
-	cout<<"\n Liked List Desctructor called ";
-}
-Node::Node(Player& player){
-    	this->player=player;
-	    this->next=NULL;
-}
-void Node::setData(Player& player){
-    this->player=player;
-}
-void Node::setNext(Node*){
-    this->next=next;
-}
-Player& Node::getData(){
-    return this->player;
-}
-Node* Node::getNext(){
-    return this->next;
+    if (second != nullptr) {
+        cout << "2. ";
+        second->getData().display();
+        cout << endl;
+    }
+    if (third != nullptr) {
+        cout << "3. ";
+        third->getData().display();
+        cout << endl;
+    }
 }
